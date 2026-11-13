@@ -119,6 +119,35 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
+// Serve the production website
+const distPath = path.join(__dirname, 'dist');
+
+app.use(express.static(distPath));
+
+app.get(/^\/(?!api(?:\/|$)).*/, async (req, res) => {
+  try {
+    const pathname = decodeURIComponent(
+      req.path.replace(/\/+$/, '') || '/'
+    );
+
+    const route = pathname === '/'
+      ? path.join(distPath, 'index.html')
+      : path.join(distPath, pathname, 'index.html');
+
+    const htmlPath = await fs.stat(route)
+      .then(stat => stat.isFile() ? route : null)
+      .catch(() => null);
+
+    if (htmlPath) {
+      return res.sendFile(htmlPath);
+    }
+
+    res.status(404).send('Page not found');
+  } catch (error) {
+    res.status(400).send('Invalid URL');
+  }
+});
+
 const PORT = Number(process.env.PORT) || 3001;
 
 const HOST =
