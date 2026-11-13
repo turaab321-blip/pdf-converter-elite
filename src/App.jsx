@@ -536,6 +536,16 @@ export default function App() {
             )}
           </main>
 
+          <section id="pdf-guide" style={{ maxWidth: 1000, margin: '55px auto', padding: '0 24px', lineHeight: 1.85, color: '#46516c' }}>
+            <h2 style={{ color: '#15183c' }}>How to Use Our Free PDF Tools</h2>
+            <p>PDF Converter Elite helps you complete common document tasks directly from your browser. Choose a tool, select the appropriate file, follow the instructions, and download the result. Some conversions require temporary server-side processing.</p>
+            <h3 style={{ color: '#15183c' }}>Choose the Right Tool</h3>
+            <p>Merge PDF combines documents, while Split PDF separates pages. Rotate PDF corrects page orientation, and Compress PDF can reduce file size. Our conversion tools help you work with Word documents, Excel spreadsheets, and JPG images.</p>
+            <h3 style={{ color: '#15183c' }}>Check Your Converted Documents</h3>
+            <p>Document conversions are not always perfect. Complex formatting, scanned pages, tables, and images can affect the output. Always review your downloaded file before sharing or printing it.</p>
+            <h3 style={{ color: '#15183c' }}>Keep Your Documents Safe</h3>
+            <p>Keep backup copies of important files and avoid uploading highly sensitive documents unless you understand the processing involved. For details, read our <a href="/privacy-policy">Privacy Policy</a>.</p>
+          </section>
           <section className="about" id="about">
             <div className="about-symbol">✦</div>
             <div className="section-label">
