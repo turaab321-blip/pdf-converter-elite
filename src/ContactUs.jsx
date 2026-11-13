@@ -106,7 +106,7 @@ export default function ContactUs() {
             marginTop: 20
           }}
         >
-          Send an Email →
+          Send an Email
         </a>
       </section>
 

@@ -1,3 +1,4 @@
+import ToolFAQ from './ToolFAQ';
 
 import { lazy, Suspense, useEffect, useState } from 'react';
 import './App.css';
@@ -368,6 +369,7 @@ export default function App() {
             >
               <h2>About This {selected.name} Tool</h2>
               <p>{selected.details}</p>
+              <ToolFAQ name={selected.name} />
             </section>
 
             <nav
