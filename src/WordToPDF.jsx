@@ -3,7 +3,9 @@ import { useState } from 'react';
 
 const API_BASE_URL = (
   import.meta.env.VITE_API_URL ||
-  (import.meta.env.DEV ? 'http://localhost:3001' : '')
+  (import.meta.env.DEV
+    ? 'http://localhost:3001'
+    : 'https://pdf-converter-elite.onrender.com')
 ).replace(/\/+$/, '');
 
 export default function WordToPDF() {
@@ -49,7 +51,8 @@ export default function WordToPDF() {
       const link = document.createElement('a');
 
       link.href = url;
-      link.download = file.name.replace(/\.docx$/i, '') + '.pdf';
+      link.download =
+        file.name.replace(/\.docx$/i, '') + '.pdf';
 
       document.body.appendChild(link);
       link.click();
@@ -61,7 +64,9 @@ export default function WordToPDF() {
 
     } catch (err) {
       console.error(err);
-      setError(err.message || 'Unable to convert this document.');
+      setError(
+        err.message || 'Unable to convert this document.'
+      );
     } finally {
       setBusy(false);
     }
