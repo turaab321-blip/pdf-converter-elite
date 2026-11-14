@@ -1,5 +1,4 @@
 
-import { chromium } from '@playwright/test';
 import { preview } from 'vite';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -66,124 +65,137 @@ function createSchema(route, description) {
   return null;
 }
 
-const server = await preview({
-  preview: {
-    host: '127.0.0.1',
-    port: 4179,
-    strictPort: true
+async function main() {
+  if (process.env.CF_PAGES === '1' ||
+      process.env.CI === 'true') {
+    console.log(
+      'Cloud build detected. Skipping browser prerendering.'
+    );
+    return;
   }
-});
 
-let browser;
+  const { chromium } = await import('@playwright/test');
 
-try {
-  browser = await chromium.launch({ headless: true });
+  const server = await preview({
+    preview: {
+      host: '127.0.0.1',
+      port: 4179,
+      strictPort: true
+    }
+  });
 
-  // Read the original Vite HTML once before writing routes.
-  const original = await readFile(
-    path.join(distDir, 'index.html'),
-    'utf8'
-  );
+  let browser;
 
-  for (const route of routes) {
-    const page = await browser.newPage();
+  try {
+    browser = await chromium.launch({ headless: true });
 
-    try {
-      const response = await page.goto(
-        `http://127.0.0.1:4179${route}`,
-        { waitUntil: 'networkidle' }
-      );
+    const original = await readFile(
+      path.join(distDir, 'index.html'),
+      'utf8'
+    );
 
-      if (!response?.ok()) {
-        throw new Error(`Failed to load ${route}`);
-      }
+    for (const route of routes) {
+      const page = await browser.newPage();
 
-      await page.waitForFunction(() => {
-        const root = document.querySelector('#root');
-
-        return (
-          root &&
-          root.children.length > 0 &&
-          !root.textContent.includes('Loading PDF tool...') &&
-          !root.textContent.includes('Loading page...')
+      try {
+        const response = await page.goto(
+          `http://127.0.0.1:4179${route}`,
+          { waitUntil: 'networkidle' }
         );
-      });
 
-      const rendered = await page.content();
+        if (!response?.ok()) {
+          throw new Error(`Failed to load ${route}`);
+        }
 
-      const body = rendered.match(
-        /<body\b[^>]*>[\s\S]*<\/body>/i
-      );
+        await page.waitForFunction(() => {
+          const root = document.querySelector('#root');
 
-      if (!body) {
-        throw new Error(`Missing body for ${route}`);
-      }
+          return (
+            root &&
+            root.children.length > 0 &&
+            !root.textContent.includes('Loading PDF tool...') &&
+            !root.textContent.includes('Loading page...')
+          );
+        });
 
-      const title = await page.title();
+        const rendered = await page.content();
 
-      const description =
-        await page
-          .locator('meta[name="description"]')
-          .getAttribute('content') || '';
+        const body = rendered.match(
+          /<body\b[^>]*>[\s\S]*<\/body>/i
+        );
 
-      let html = original.replace(
-        /<body\b[^>]*>[\s\S]*<\/body>/i,
-        body[0]
-      );
+        if (!body) {
+          throw new Error(`Missing body for ${route}`);
+        }
 
-      html = html.replace(
-        /<title>[\s\S]*?<\/title>/i,
-        `<title>${escapeHtml(title)}</title>`
-      );
+        const title = await page.title();
 
-      html = html.replace(
-        /(<meta\s+name="description"\s+content=")[^"]*(")/i,
-        (_, start, end) =>
-          start + escapeHtml(description) + end
-      );
+        const description =
+          await page
+            .locator('meta[name="description"]')
+            .getAttribute('content') || '';
 
-      const schema = createSchema(route, description);
-
-      if (schema) {
-        const schemaTag =
-          '<script type="application/ld+json">' +
-          JSON.stringify(schema).replace(/</g, '\\u003c') +
-          '</script>';
+        let html = original.replace(
+          /<body\b[^>]*>[\s\S]*<\/body>/i,
+          body[0]
+        );
 
         html = html.replace(
-          '</head>',
-          `${schemaTag}\n</head>`
+          /<title>[\s\S]*?<\/title>/i,
+          `<title>${escapeHtml(title)}</title>`
         );
+
+        html = html.replace(
+          /(<meta\s+name="description"\s+content=")[^"]*(")/i,
+          (_, start, end) =>
+            start + escapeHtml(description) + end
+        );
+
+        const schema = createSchema(route, description);
+
+        if (schema) {
+          const schemaTag =
+            '<script type="application/ld+json">' +
+            JSON.stringify(schema).replace(/</g, '\\u003c') +
+            '</script>';
+
+          html = html.replace(
+            '</head>',
+            `${schemaTag}\n</head>`
+          );
+        }
+
+        const folder = path.join(
+          distDir,
+          route === '/' ? '' : route.slice(1)
+        );
+
+        await mkdir(folder, { recursive: true });
+
+        await writeFile(
+          path.join(folder, 'index.html'),
+          html,
+          'utf8'
+        );
+
+        console.log(`Prerendered: ${route}`);
+
+      } finally {
+        await page.close();
       }
-
-      const folder = path.join(
-        distDir,
-        route === '/' ? '' : route.slice(1)
-      );
-
-      await mkdir(folder, { recursive: true });
-
-      await writeFile(
-        path.join(folder, 'index.html'),
-        html,
-        'utf8'
-      );
-
-      console.log(`Prerendered: ${route}`);
-
-    } finally {
-      await page.close();
     }
+
+    console.log('SEO prerendering completed successfully.');
+
+  } finally {
+    if (browser) {
+      await browser.close();
+    }
+
+    await new Promise(resolve =>
+      server.httpServer.close(resolve)
+    );
   }
-
-  console.log('SEO prerendering completed successfully.');
-
-} finally {
-  if (browser) {
-    await browser.close();
-  }
-
-  await new Promise(resolve =>
-    server.httpServer.close(resolve)
-  );
 }
+
+await main();
