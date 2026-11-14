@@ -13,6 +13,7 @@ const execFileAsync = promisify(execFile);
 
 const allowedOrigins = [
   /^http:\/\/localhost:\d+$/,
+  /^https:\/\/pdf-converter-elite\.turaab321\.workers\.dev$/,
   /^http:\/\/127\.0\.0\.1:\d+$/
 ];
 
@@ -159,3 +160,4 @@ app.listen(PORT, HOST, () => {
     `PDF Elite Backend running on http://${HOST}:${PORT}`
   );
 });
+
