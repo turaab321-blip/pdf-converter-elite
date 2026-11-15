@@ -1,12 +1,7 @@
 ﻿
 import { useState } from 'react';
 
-const API_BASE_URL = (
-  import.meta.env.VITE_API_URL ||
-  (import.meta.env.DEV
-    ? 'http://localhost:3001'
-    : 'https://pdf-converter-elite.onrender.com')
-).replace(/\/+$/, '');
+const API_BASE_URL = 'https://pdf-converter-elite-1.onrender.com';
 
 export default function WordToPDF() {
   const [file, setFile] = useState(null);
@@ -38,35 +33,31 @@ export default function WordToPDF() {
 
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
-        throw new Error(data.error || 'Conversion failed.');
+        throw new Error(data.error || `Conversion failed. HTTP ${response.status}`);
       }
 
       const blob = await response.blob();
 
-      if (!blob.size) {
-        throw new Error('The converted PDF is empty.');
+      if (!blob.size || blob.type !== 'application/pdf') {
+        throw new Error('Server did not return a valid PDF.');
       }
 
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
 
       link.href = url;
-      link.download =
-        file.name.replace(/\.docx$/i, '') + '.pdf';
+      link.download = file.name.replace(/\.docx$/i, '') + '.pdf';
 
       document.body.appendChild(link);
       link.click();
       link.remove();
 
       setTimeout(() => URL.revokeObjectURL(url), 60000);
-
       setSuccess('PDF downloaded successfully!');
 
     } catch (err) {
-      console.error(err);
-      setError(
-        err.message || 'Unable to convert this document.'
-      );
+      console.error('Word to PDF error:', err);
+      setError(err.message || 'Unable to convert this document.');
     } finally {
       setBusy(false);
     }
@@ -101,23 +92,11 @@ export default function WordToPDF() {
         }}
       />
 
-      {file && (
-        <p style={{ marginTop: 15 }}>
-          Selected: {file.name}
-        </p>
-      )}
+      {file && <p>Selected: {file.name}</p>}
 
-      {error && (
-        <p style={{ color: '#dc2626' }}>
-          {error}
-        </p>
-      )}
+      {error && <p style={{ color: '#dc2626' }}>{error}</p>}
 
-      {success && (
-        <p style={{ color: '#16a34a' }}>
-          {success}
-        </p>
-      )}
+      {success && <p style={{ color: '#16a34a' }}>{success}</p>}
 
       <button
         onClick={convertToPDF}
