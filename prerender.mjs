@@ -3,6 +3,8 @@ import { preview } from 'vite';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
+const SITE_URL = 'https://pdf-converter-elite.turaab321.workers.dev';
+
 const toolNames = {
   '/pdf-to-word': 'PDF to Word Converter',
   '/pdf-to-excel': 'PDF to Excel Converter',
@@ -41,6 +43,7 @@ function createSchema(route, description) {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
       name: 'PDF Converter Elite',
+      url: `${SITE_URL}/`,
       description,
       inLanguage: 'en'
     };
@@ -51,6 +54,7 @@ function createSchema(route, description) {
       '@context': 'https://schema.org',
       '@type': 'SoftwareApplication',
       name: toolNames[route],
+      url: `${SITE_URL}${route}`,
       description,
       applicationCategory: 'UtilitiesApplication',
       operatingSystem: 'Web',
@@ -66,11 +70,11 @@ function createSchema(route, description) {
 }
 
 async function main() {
-  if (process.env.CF_PAGES === '1' ||
-      process.env.CI === 'true') {
-    console.log(
-      'Cloud build detected. Skipping browser prerendering.'
-    );
+  if (
+    process.env.CF_PAGES === '1' ||
+    process.env.CI === 'true'
+  ) {
+    console.log('Cloud build detected. Skipping browser prerendering.');
     return;
   }
 
@@ -149,6 +153,19 @@ async function main() {
           /(<meta\s+name="description"\s+content=")[^"]*(")/i,
           (_, start, end) =>
             start + escapeHtml(description) + end
+        );
+
+        const canonicalUrl =
+          `${SITE_URL}${route === '/' ? '/' : route}`;
+
+        html = html.replace(
+          /<link\s+rel="canonical"[^>]*>/i,
+          `<link rel="canonical" href="${canonicalUrl}" />`
+        );
+
+        html = html.replace(
+          /<meta\s+property="og:url"[^>]*>/i,
+          `<meta property="og:url" content="${canonicalUrl}" />`
         );
 
         const schema = createSchema(route, description);
