@@ -2,4 +2,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://pdfconverterelite.xyz/sitemap.xml
+Sitemap: https://pdfconverterelite.xyz/sitemap.txt
+
