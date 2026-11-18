@@ -13,6 +13,7 @@ const execFileAsync = promisify(execFile);
 
 // Allowed production and development origins
 const allowedOrigins = new Set([
+  'https://pdfconverterelite.xyz',
   'https://pdf-converter-elite.turaab321.workers.dev',
   'http://localhost:5173',
   'http://127.0.0.1:5173'
@@ -213,3 +214,4 @@ app.listen(PORT, HOST, () => {
   console.log('LibreOffice path:', sofficePath);
   console.log('Allowed origins:', [...allowedOrigins]);
 });
+

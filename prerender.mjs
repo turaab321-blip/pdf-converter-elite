@@ -1,9 +1,9 @@
-
+﻿
 import { preview } from 'vite';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-const SITE_URL = 'https://pdf-converter-elite.turaab321.workers.dev';
+const SITE_URL = 'https://pdfconverterelite.xyz';
 
 const toolNames = {
   '/pdf-to-word': 'PDF to Word Converter',
@@ -216,3 +216,4 @@ async function main() {
 }
 
 await main();
+
