@@ -1,6 +1,6 @@
 ﻿const faqs = {
   'PDF to Word': [
-    ['Can I edit the converted Word file?', 'Yes, you can edit the resulting Word document. Formatting may need adjustments.'],
+    ['What does the converted Word file contain?', 'The converted Word file contains page images. Text editing is not supported.'],
     ['Will the original layout be preserved?', 'Results depend on the PDF structure. Complex layouts and scanned pages may not convert accurately.']
   ],
   'PDF to Excel': [

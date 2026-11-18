@@ -12,7 +12,7 @@ const pages = {
   },
   '/pdf-to-word': {
     title: 'PDF to Word Converter Online Free | PDF Converter Elite',
-    description: 'Convert PDF files into editable Word documents online with our free PDF to Word converter.'
+    description: 'Convert PDF files into Word documents online with our free PDF to Word converter.'
   },
   '/pdf-to-excel': {
     title: 'PDF to Excel Converter Online Free | PDF Converter Elite',

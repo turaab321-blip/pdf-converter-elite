@@ -23,7 +23,7 @@ const tools = [
     icon: '📝',
     name: 'PDF to Word',
     slug: '/pdf-to-word',
-    desc: 'Convert PDF documents into editable Word files.',
+    desc: 'Convert PDF documents into Word files.',
     color: 'blue',
     component: PDFToWord,
     heading: 'PDF to Word Converter',

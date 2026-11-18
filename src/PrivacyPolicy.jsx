@@ -47,7 +47,7 @@ export default function PrivacyPolicy() {
           Privacy Policy
         </h1>
 
-        <p>Last updated: November 13, 2026</p>
+        <p>Last updated: November 18, 2026</p>
 
         <p>
           This Privacy Policy explains how PDF Converter
@@ -72,7 +72,7 @@ export default function PrivacyPolicy() {
         </h2>
 
         <p>
-          Some PDF tools process documents directly
+          PDF to Word and other browser-based tools process documents directly
           within your web browser. Other tools,
           including Word to PDF conversion, may
           upload documents to our processing server.
