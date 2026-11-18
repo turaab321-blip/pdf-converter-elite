@@ -1,247 +1,454 @@
-﻿
-import { useState } from 'react';
 
-const API_BASE_URL = (
-  import.meta.env.VITE_API_URL ||
-  (import.meta.env.DEV
-    ? 'http://localhost:3001'
-    : 'https://pdf-converter-elite.onrender.com')
-).replace(/\/+$/, '');
+import { useState } from 'react';
+import * as pdfjsLib from 'pdfjs-dist';
+import {
+  Document,
+  Packer,
+  Paragraph,
+  ImageRun,
+  PageBreak,
+  TextRun
+} from 'docx';
+import pdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
 
 export default function PDFToWord() {
   const [file, setFile] = useState(null);
+  const [mode, setMode] = useState('editable');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [progress, setProgress] = useState(0);
 
-  function handleFile(event) {
-    const selected = event.target.files?.[0];
-
-    setError('');
-    setSuccess('');
-    setFile(null);
-
-    if (!selected) return;
-
-    if (!/\.pdf$/i.test(selected.name)) {
-      setError('Please select a valid PDF file.');
+  async function convertPDF() {
+    if (!file) {
+      setError('Please select a PDF file.');
       return;
     }
-
-    if (selected.size > 20 * 1024 * 1024) {
-      setError('Maximum file size is 20 MB.');
-      return;
-    }
-
-    setFile(selected);
-  }
-
-  async function convertToWord() {
-    if (!file || loading) return;
 
     setLoading(true);
     setError('');
     setSuccess('');
+    setProgress(0);
 
-    const controller = new AbortController();
-    const timeout = setTimeout(
-      () => controller.abort(),
-      240000
-    );
+    let pdf = null;
 
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const response = await fetch(
-        `${API_BASE_URL}/api/pdf-to-word`,
-        {
-          method: 'POST',
-          body: formData,
-          signal: controller.signal
-        }
+      const data = new Uint8Array(
+        await file.arrayBuffer()
       );
 
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
+      pdf = await pdfjsLib.getDocument({ data }).promise;
 
-        throw new Error(
-          data.error || 'Conversion failed. Please try again.'
+      const paragraphs = [];
+      let extractedCharacters = 0;
+
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+
+        if (i > 1) {
+          paragraphs.push(
+            new Paragraph({
+              children: [new PageBreak()]
+            })
+          );
+        }
+
+        if (mode === 'editable') {
+          const content = await page.getTextContent();
+
+          let line = '';
+
+          for (const item of content.items) {
+            if (typeof item.str !== 'string') continue;
+
+            line += item.str + ' ';
+            extractedCharacters += item.str.trim().length;
+
+            if (item.hasEOL) {
+              if (line.trim()) {
+                paragraphs.push(
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: line.trim(),
+                        size: 24
+                      })
+                    ],
+                    spacing: { after: 120 }
+                  })
+                );
+              }
+
+              line = '';
+            }
+          }
+
+          if (line.trim()) {
+            paragraphs.push(
+              new Paragraph({
+                children: [
+                  new TextRun({
+                    text: line.trim(),
+                    size: 24
+                  })
+                ],
+                spacing: { after: 120 }
+              })
+            );
+          }
+
+        } else {
+          const viewport = page.getViewport({
+            scale: 2
+          });
+
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+
+          canvas.width = Math.ceil(viewport.width);
+          canvas.height = Math.ceil(viewport.height);
+
+          await page.render({
+            canvasContext: context,
+            viewport
+          }).promise;
+
+          const imageBlob = await new Promise(
+            (resolve, reject) => {
+              canvas.toBlob(
+                blob => blob
+                  ? resolve(blob)
+                  : reject(new Error('Image creation failed.')),
+                'image/png'
+              );
+            }
+          );
+
+          const imageData = new Uint8Array(
+            await imageBlob.arrayBuffer()
+          );
+
+          const ratio = Math.min(
+            595 / canvas.width,
+            842 / canvas.height
+          );
+
+          paragraphs.push(
+            new Paragraph({
+              spacing: { before: 0, after: 0 },
+              children: [
+                new ImageRun({
+                  data: imageData,
+                  transformation: {
+                    width: Math.round(canvas.width * ratio),
+                    height: Math.round(canvas.height * ratio)
+                  },
+                  type: 'png'
+                })
+              ]
+            })
+          );
+
+          canvas.width = 0;
+          canvas.height = 0;
+        }
+
+        page.cleanup();
+
+        setProgress(
+          Math.round((i / pdf.numPages) * 100)
         );
       }
 
-      const blob = await response.blob();
-
-      const header = new Uint8Array(
-        await blob.slice(0, 2).arrayBuffer()
-      );
-
-      if (header[0] !== 80 || header[1] !== 75) {
-        throw new Error('Invalid Word file received.');
+      if (
+        mode === 'editable' &&
+        extractedCharacters === 0
+      ) {
+        throw new Error(
+          'No editable text was found. This PDF may contain scanned images. Please use Preserve Original Layout mode.'
+        );
       }
 
+      const margin = mode === 'editable' ? 1000 : 0;
+
+      const doc = new Document({
+        sections: [
+          {
+            properties: {
+              page: {
+                size: {
+                  width: 11906,
+                  height: 16838
+                },
+                margin: {
+                  top: margin,
+                  right: margin,
+                  bottom: margin,
+                  left: margin
+                }
+              }
+            },
+            children: paragraphs
+          }
+        ]
+      });
+
+      const blob = await Packer.toBlob(doc);
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
 
       link.href = url;
-      link.download = file.name.replace(/\.pdf$/i, '') + '.docx';
+      link.download =
+        file.name.replace(/\.pdf$/i, '') +
+        (mode === 'editable' ? '-editable' : '-layout') +
+        '.docx';
 
       document.body.appendChild(link);
       link.click();
       link.remove();
 
-      setTimeout(() => URL.revokeObjectURL(url), 30000);
+      setTimeout(
+        () => URL.revokeObjectURL(url),
+        60000
+      );
 
-      setSuccess('Conversion successful! Your Word file has been downloaded.');
+      setSuccess('Word document downloaded successfully!');
 
     } catch (err) {
+      console.error(err);
       setError(
-        err.name === 'AbortError'
-          ? 'Conversion timed out. Please try a smaller PDF.'
-          : err.message || 'Conversion failed.'
+        err.message || 'Unable to convert this PDF.'
       );
     } finally {
-      clearTimeout(timeout);
-      setLoading(false);
+      try {
+        if (pdf) await pdf.destroy();
+      } finally {
+        setLoading(false);
+      }
     }
   }
 
   return (
-    <div style={{
-      maxWidth: '650px',
-      width: '100%',
-      margin: '25px auto',
+    <section style={{
+      maxWidth: 650,
+      width: 'calc(100% - 32px)',
+      margin: '30px auto',
       padding: '24px',
       boxSizing: 'border-box',
-      background: '#ffffff',
-      border: '1px solid #dbe3ed',
-      borderRadius: '16px',
-      boxShadow: '0 4px 15px rgba(0,0,0,0.05)',
+      background: '#fff',
+      borderRadius: 18,
       textAlign: 'center',
-      color: '#1e293b'
+      boxShadow: '0 12px 35px rgba(20,24,60,0.08)'
     }}>
-
-      <h2 style={{ marginTop: 0 }}>
-        Convert PDF to Word
+      <h2 style={{ color: '#15183c' }}>
+        PDF to Word Converter
       </h2>
 
-      <p style={{ color: '#475569', lineHeight: 1.6 }}>
-        Convert PDF documents into Word files while preserving
-        text, images, tables and layout as closely as possible.
+      <p style={{
+        color: '#475569',
+        lineHeight: 1.7
+      }}>
+        Convert PDF files into editable Word documents
+        or preserve their original visual layout.
       </p>
 
-      <div style={{
-        border: '2px dashed #2563eb',
-        background: '#eff6ff',
-        padding: '28px 14px',
-        borderRadius: '12px',
-        margin: '22px 0'
-      }}>
-
-        <label
-          htmlFor="pdf-word-upload"
-          style={{
-            display: 'inline-block',
-            background: '#1d4ed8',
-            color: '#ffffff',
-            borderRadius: '8px',
-            padding: '13px 25px',
-            fontWeight: 600,
-            cursor: loading ? 'not-allowed' : 'pointer'
-          }}
-        >
-          Select PDF File
-        </label>
-
-        <input
-          id="pdf-word-upload"
-          type="file"
-          accept=".pdf,application/pdf"
-          disabled={loading}
-          onChange={handleFile}
-          style={{
-            position: 'absolute',
-            width: '1px',
-            height: '1px',
-            opacity: 0
-          }}
-        />
-
-        <p style={{
-          marginBottom: 0,
-          overflowWrap: 'anywhere',
-          color: '#334155'
+      <fieldset
+        disabled={loading}
+        style={{
+          border: 0,
+          padding: 0,
+          margin: '24px 0',
+          textAlign: 'left'
+        }}
+      >
+        <legend style={{
+          fontWeight: 700,
+          color: '#15183c',
+          marginBottom: 12
         }}>
-          {file ? file.name : 'Maximum file size: 20 MB'}
-        </p>
+          Choose Conversion Mode
+        </legend>
 
+        {[
+          {
+            value: 'editable',
+            title: 'Editable Word Document',
+            description:
+              'Extract selectable PDF text into editable Word content. Original formatting may change.'
+          },
+          {
+            value: 'layout',
+            title: 'Preserve Original Layout',
+            description:
+              'Keep the visual appearance of PDF pages as images in Word. Text will not be editable.'
+          }
+        ].map(option => (
+          <label
+            key={option.value}
+            style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: 12,
+              padding: 16,
+              marginBottom: 12,
+              borderRadius: 12,
+              border: mode === option.value
+                ? '2px solid #be185d'
+                : '2px solid #e2e8f0',
+              background: mode === option.value
+                ? '#fff1f5'
+                : '#f8fafc',
+              cursor: 'pointer'
+            }}
+          >
+            <input
+              type="radio"
+              name="conversion-mode"
+              value={option.value}
+              checked={mode === option.value}
+              onChange={() => {
+                setMode(option.value);
+                setError('');
+                setSuccess('');
+              }}
+              style={{
+                accentColor: '#be185d',
+                marginTop: 5
+              }}
+            />
+
+            <span>
+              <strong style={{
+                display: 'block',
+                color: '#15183c',
+                marginBottom: 5
+              }}>
+                {option.title}
+              </strong>
+
+              <span style={{
+                color: '#475569',
+                fontSize: 14,
+                lineHeight: 1.6
+              }}>
+                {option.description}
+              </span>
+            </span>
+          </label>
+        ))}
+      </fieldset>
+
+      <label
+        htmlFor="pdf-word-file"
+        style={{
+          display: 'block',
+          fontWeight: 700,
+          color: '#15183c',
+          marginBottom: 12
+        }}
+      >
+        Select PDF File
+      </label>
+
+      <input
+        id="pdf-word-file"
+        type="file"
+        accept=".pdf,application/pdf"
+        disabled={loading}
+        onChange={e => {
+          setFile(e.target.files?.[0] || null);
+          setError('');
+          setSuccess('');
+          setProgress(0);
+        }}
+        style={{
+          maxWidth: '100%',
+          color: '#334155'
+        }}
+      />
+
+      <p style={{
+        color: '#475569',
+        overflowWrap: 'anywhere'
+      }}>
+        {file ? file.name : 'No file selected'}
+      </p>
+
+      <div
+        aria-live="polite"
+        style={{
+          minHeight: 48,
+          margin: '12px 0'
+        }}
+      >
+        {loading && (
+          <>
+            <progress
+              aria-label="Conversion progress"
+              value={progress}
+              max={100}
+              style={{
+                width: '100%',
+                accentColor: '#be185d'
+              }}
+            />
+
+            <p style={{ color: '#334155' }}>
+              Processing: {progress}%
+            </p>
+          </>
+        )}
+
+        {error && (
+          <p role="alert" style={{ color: '#b91c1c' }}>
+            {error}
+          </p>
+        )}
+
+        {success && (
+          <p style={{ color: '#166534' }}>
+            {success}
+          </p>
+        )}
       </div>
 
       <button
         type="button"
-        onClick={convertToWord}
-        disabled={!file || loading}
+        onClick={convertPDF}
+        disabled={loading || !file}
         style={{
-          width: '100%',
-          padding: '15px',
-          border: 'none',
-          borderRadius: '9px',
-          fontSize: '16px',
-          fontWeight: 700,
+          background: loading || !file
+            ? '#64748b'
+            : '#be185d',
           color: '#ffffff',
-          background: !file || loading ? '#64748b' : '#15803d',
-          cursor: !file || loading ? 'not-allowed' : 'pointer'
+          border: 0,
+          padding: '15px 28px',
+          borderRadius: 10,
+          cursor: loading
+            ? 'wait'
+            : !file
+              ? 'not-allowed'
+              : 'pointer',
+          fontWeight: 700,
+          width: '100%',
+          maxWidth: 320
         }}
       >
-        {loading ? 'Converting PDF to Word...' : 'Convert to Word'}
+        {loading ? 'Converting...' : 'Convert to Word'}
       </button>
 
-      {loading && (
-        <div role="status" aria-live="polite">
-          <progress
-            aria-label="PDF conversion in progress"
-            style={{ width: '100%', marginTop: '20px' }}
-          />
-
-          <p style={{ color: '#475569' }}>
-            Please wait. Larger documents or server startup
-            may take longer.
-          </p>
-        </div>
-      )}
-
-      {error && (
-        <p role="alert" style={{
-          color: '#b91c1c',
-          background: '#fef2f2',
-          padding: '12px',
-          borderRadius: '8px'
-        }}>
-          {error}
-        </p>
-      )}
-
-      {success && (
-        <p role="status" style={{
-          color: '#166534',
-          background: '#f0fdf4',
-          padding: '12px',
-          borderRadius: '8px'
-        }}>
-          {success}
-        </p>
-      )}
-
       <p style={{
-        fontSize: '13px',
+        fontSize: 13,
         color: '#475569',
-        marginTop: '20px'
+        lineHeight: 1.7,
+        marginTop: 20
       }}>
-        Free conversion. No watermark. No registration required.
-        Files are temporarily processed on our server.
-        Scanned PDFs may not contain editable text. <a href="https://github.com/turaab321-blip/pdf-converter-elite" target="_blank" rel="noopener noreferrer">Source Code (AGPL-3.0)</a>.
+        Scanned PDFs without selectable text require OCR
+        for editable conversion. This tool does not
+        currently include OCR.
       </p>
-    </div>
+    </section>
   );
 }
-
