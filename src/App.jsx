@@ -1,4 +1,4 @@
-import ToolFAQ from './ToolFAQ';
+﻿import ToolFAQ from './ToolFAQ';
 
 import { lazy, Suspense, useEffect, useState } from 'react';
 import './App.css';
@@ -433,7 +433,7 @@ export default function App() {
                 </p>
 
                 <div className="hero-benefits">
-                  <span>✓ Browser-Based</span>
+                  <span>✓ No Installation Required</span>
                   <span>⚡ Easy to Use</span>
                   <span>✓ Free Tools</span>
                 </div>
@@ -632,3 +632,4 @@ export default function App() {
     </div>
   );
 }
+
