@@ -78,31 +78,6 @@ const original = await readFile(
   'utf8'
 );
 
-const toolLinks = [
-  ['/pdf-to-word', 'PDF to Word'],
-  ['/pdf-to-excel', 'PDF to Excel'],
-  ['/merge-pdf', 'Merge PDF'],
-  ['/split-pdf', 'Split PDF'],
-  ['/compress-pdf', 'Compress PDF'],
-  ['/protect-pdf', 'Protect PDF'],
-  ['/word-to-pdf', 'Word to PDF'],
-  ['/jpg-to-pdf', 'JPG to PDF'],
-  ['/rotate-pdf', 'Rotate PDF']
-];
-
-const informationLinks = [
-  ['/about-us', 'About Us'],
-  ['/contact-us', 'Contact Us'],
-  ['/privacy-policy', 'Privacy Policy'],
-  ['/terms-of-service', 'Terms of Service']
-];
-
-function makeLinks(items) {
-  return items.map(([url, label]) =>
-    `<a href="${url}">${escapeHtml(label)}</a>`
-  ).join(' | ');
-}
-
 for (const [route, page] of Object.entries(pages)) {
   const canonical = `${SITE_URL}${route}`;
   let html = original;
@@ -133,27 +108,6 @@ for (const [route, page] of Object.entries(pages)) {
 
   html = html.replace('</head>', `${seo}\n</head>`);
 
-  // Provide crawlable links in the initial HTML.
-  // They remain visible if JavaScript is unavailable.
-  // When React starts, it replaces this fallback content.
-  const fallback = `
-    <main aria-label="PDF Converter Elite navigation">
-      <h1>${escapeHtml(page.title)}</h1>
-      <p>${escapeHtml(page.description)}</p>
-      <nav aria-label="PDF tools">
-        ${makeLinks(toolLinks)}
-      </nav>
-      <footer>
-        ${makeLinks(informationLinks)}
-      </footer>
-    </main>
-  `;
-
-  html = html.replace(
-    /<div id="root"><\/div>/i,
-    `<div id="root">${fallback}</div>`
-  );
-
   const folder = path.join(
     distDir,
     route === '/' ? '' : route.slice(1)
@@ -171,3 +125,4 @@ for (const [route, page] of Object.entries(pages)) {
 }
 
 console.log('SEO completed for all 14 pages.');
+
