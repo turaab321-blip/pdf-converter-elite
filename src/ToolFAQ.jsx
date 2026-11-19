@@ -1,7 +1,30 @@
-﻿const faqs = {
+﻿
+const faqs = {
   'PDF to Word': [
-    ['What does the converted Word file contain?', 'The converted Word file contains page images. Text editing is not supported.'],
-    ['Will the original layout be preserved?', 'Results depend on the PDF structure. Complex layouts and scanned pages may not convert accurately.']
+    [
+      'How can I convert a PDF to Word online?',
+      'Open the PDF to Word tool, upload your PDF document, start the conversion and download the resulting Word file. Review the document after conversion.'
+    ],
+    [
+      'Is the converted Word document editable?',
+      'The current converter places PDF pages into a Word document as images. You can open the DOCX file in Microsoft Word, but the original text is not directly editable.'
+    ],
+    [
+      'Will my PDF layout look the same in Word?',
+      'The converter uses images of PDF pages to help retain their visual appearance. Results can vary, so check page sizes, images and formatting in the downloaded document.'
+    ],
+    [
+      'Can I convert a scanned PDF to Word?',
+      'Yes, scanned PDF pages can be included as images in the Word document. However, this tool does not perform OCR, so text inside scanned pages will not become editable.'
+    ],
+    [
+      'Can I convert a PDF containing tables and pictures?',
+      'The converter can include pages containing tables, pictures and other visual elements as images. It does not reconstruct those elements as editable Word tables or objects.'
+    ],
+    [
+      'What should I do if the Word file is too large?',
+      'Image-based Word documents can be larger than expected, especially when the original PDF contains many pages. Try a smaller document or optimize the original PDF before conversion.'
+    ]
   ],
   'PDF to Excel': [
     ['Can I extract tables from a PDF?', 'You can extract supported PDF content into a spreadsheet. Complex tables may require manual corrections.'],
