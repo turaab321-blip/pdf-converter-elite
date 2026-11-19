@@ -1,7 +1,4 @@
-﻿
 User-agent: *
 Allow: /
 
 Sitemap: https://pdfconverterelite.xyz/sitemap.xml
-
-
