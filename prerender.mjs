@@ -217,13 +217,26 @@ for (const [route, page] of Object.entries(pages)) {
     </head>`
   );
 
-  // Keep the SEO section readable without JavaScript.
-  // Remove it once React has rendered to avoid duplicate headings.
+  // Keep static SEO content in the HTML for non-JavaScript clients.
+  // Hide it visually until React is ready to avoid page movement.
   const staticContent = createSeoContent(route, page);
 
   html = html.replace(
     '<div id="root"></div>',
-    `<div id="root"></div>
+    `<style>
+      #seo-fallback {
+        position: absolute !important;
+        width: 1px !important;
+        height: 1px !important;
+        padding: 0 !important;
+        margin: -1px !important;
+        overflow: hidden !important;
+        clip: rect(0, 0, 0, 0) !important;
+        white-space: nowrap !important;
+        border: 0 !important;
+      }
+    </style>
+    <div id="root"></div>
     <div id="seo-fallback">${staticContent}</div>
     <script>
       (function () {
