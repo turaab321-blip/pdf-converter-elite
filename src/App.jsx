@@ -262,7 +262,7 @@ export default function App() {
           className="logo"
           onClick={event => handleLink(event, '/')}
         >
-          <span className="logo-icon">â–¤</span>
+          <span className="logo-icon">▤</span>
           <span>PDF Converter <strong>Elite</strong></span>
         </a>
 
@@ -273,7 +273,7 @@ export default function App() {
           aria-expanded={menuOpen}
           type="button"
         >
-          {menuOpen ? 'âœ•' : 'â˜°'}
+          {menuOpen ? '✕' : '☰'}
         </button>
 
         <nav className={menuOpen ? 'nav-open' : ''}>
@@ -311,7 +311,7 @@ export default function App() {
           href="/#tools"
           onClick={event => handleSectionLink(event, 'tools')}
         >
-          Explore Tools â†—
+          Explore Tools ↗
         </a>
       </header>
 
@@ -330,7 +330,7 @@ export default function App() {
             onClick={() => goToSection('tools')}
             type="button"
           >
-            â† Back to All Tools
+            ← Back to All Tools
           </button>
 
           <div className="active-tool-content">
@@ -418,7 +418,7 @@ export default function App() {
             <div className="hero-inner">
               <div className="hero-copy">
                 <div className="eyebrow">
-                  âœ¦ YOUR ALL-IN-ONE PDF TOOLKIT
+                  ✦ YOUR ALL-IN-ONE PDF TOOLKIT
                 </div>
 
                 <h1>
@@ -433,9 +433,9 @@ export default function App() {
                 </p>
 
                 <div className="hero-benefits">
-                  <span>âœ“ Browser-Based</span>
-                  <span>âš¡ Easy to Use</span>
-                  <span>âœ“ Free Tools</span>
+                  <span>✓ Browser-Based</span>
+                  <span>⚡ Easy to Use</span>
+                  <span>✓ Free Tools</span>
                 </div>
 
                 <div className="hero-actions">
@@ -444,7 +444,7 @@ export default function App() {
                     href="/#tools"
                     onClick={event => handleSectionLink(event, 'tools')}
                   >
-                    Explore All Tools <span>â†’</span>
+                    Explore All Tools <span>→</span>
                   </a>
 
                   <a
@@ -452,7 +452,7 @@ export default function App() {
                     href="/#about"
                     onClick={event => handleSectionLink(event, 'about')}
                   >
-                    Learn More â†—
+                    Learn More ↗
                   </a>
                 </div>
               </div>
@@ -463,13 +463,13 @@ export default function App() {
 
                 <div className="float-icon float-word">W</div>
                 <div className="float-icon float-excel">X</div>
-                <div className="float-icon float-lock">ðŸ”’</div>
-                <div className="float-icon float-image">â–§</div>
+                <div className="float-icon float-lock">🔒</div>
+                <div className="float-icon float-image">▧</div>
 
                 <div className="pdf-sheet">
                   <div className="sheet-fold"></div>
                   <div className="sheet-badge">PDF</div>
-                  <div className="sheet-symbol">â–¤</div>
+                  <div className="sheet-symbol">▤</div>
                   <div className="sheet-line"></div>
                   <div className="sheet-line short"></div>
                   <div className="sheet-line"></div>
@@ -480,7 +480,7 @@ export default function App() {
 
           <main className="main" id="tools">
             <div className="section-label">
-              âœ¦ OUR PDF TOOLS âœ¦
+              ✦ OUR PDF TOOLS ✦
             </div>
 
             <h2>
@@ -493,7 +493,7 @@ export default function App() {
             </p>
 
             <div className="search-box">
-              <span>âŒ•</span>
+              <span>⌕</span>
               <input
                 className="search"
                 placeholder="Search for a PDF tool..."
@@ -524,7 +524,7 @@ export default function App() {
                     <span>{tool.desc}</span>
                   </span>
 
-                  <span className="tool-arrow">â†’</span>
+                  <span className="tool-arrow">→</span>
                 </a>
               ))}
             </div>
@@ -547,7 +547,7 @@ export default function App() {
             <p>Keep backup copies of important files and avoid uploading highly sensitive documents unless you understand the processing involved. For details, read our <a href="/privacy-policy">Privacy Policy</a>.</p>
           </section>
           <section className="about" id="about">
-            <div className="about-symbol">âœ¦</div>
+            <div className="about-symbol">✦</div>
             <div className="section-label">
               MADE FOR SIMPLICITY
             </div>
@@ -565,7 +565,7 @@ export default function App() {
               className="about-button"
               onClick={event => handleSectionLink(event, 'tools')}
             >
-              Start Using Tools â†’
+              Start Using Tools →
             </a>
           </section>
         </>
@@ -574,7 +574,7 @@ export default function App() {
       <footer className="footer">
         <div className="footer-top">
           <div className="footer-logo">
-            â–¤ PDF Converter <strong>Elite</strong>
+            ▤ PDF Converter <strong>Elite</strong>
           </div>
 
           <p>Smart PDF tools for simpler everyday work.</p>
@@ -617,7 +617,7 @@ export default function App() {
 
         <div className="footer-bottom">
           <span>
-            Â© {new Date().getFullYear()} PDF Converter Elite.
+            © {new Date().getFullYear()} PDF Converter Elite.
             All rights reserved.
           </span>
 
@@ -625,7 +625,7 @@ export default function App() {
             href="/"
             onClick={event => handleLink(event, '/')}
           >
-            Back to top â†‘
+            Back to top ↑
           </a>
         </div>
       </footer>
