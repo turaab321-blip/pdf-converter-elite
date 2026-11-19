@@ -12,11 +12,11 @@ const pages = {
   },
   '/pdf-to-word': {
     title: 'PDF to Word Converter Online Free | PDF Converter Elite',
-    description: 'Convert PDF files into Word documents online with our free PDF to Word converter.'
+    description: 'Convert PDF pages into a Word document online for free. Preserve the appearance of pages, images and layouts.'
   },
   '/pdf-to-excel': {
     title: 'PDF to Excel Converter Online Free | PDF Converter Elite',
-    description: 'Convert PDF files to Excel spreadsheets online. Extract PDF table data with our free PDF to Excel tool.'
+    description: 'Convert PDF files to Excel spreadsheets online. Extract PDF text and data with our free PDF to Excel tool.'
   },
   '/merge-pdf': {
     title: 'Merge PDF Files Online Free | PDF Converter Elite',
@@ -28,11 +28,11 @@ const pages = {
   },
   '/compress-pdf': {
     title: 'Compress PDF Online Free | PDF Converter Elite',
-    description: 'Reduce PDF file size online using our free PDF compression tool for easier sharing and storage.'
+    description: 'Try reducing PDF file size online using our free PDF compression tool for easier sharing and storage.'
   },
   '/protect-pdf': {
     title: 'Password Protect PDF Online Free | PDF Converter Elite',
-    description: 'Add password protection to your PDF documents using our free online PDF protection tool.'
+    description: 'Add password protection to PDF documents or unlock authorized files using our free online PDF tool.'
   },
   '/word-to-pdf': {
     title: 'Word to PDF Converter Online Free | PDF Converter Elite',
@@ -100,13 +100,45 @@ for (const [route, page] of Object.entries(pages)) {
   const seo = `
     <title>${escapeHtml(page.title)}</title>
     <meta name="description" content="${escapeHtml(page.description)}" />
-    <link rel="canonical" href="${canonical}" />
+    <link rel="canonical" href="${escapeHtml(canonical)}" />
     <meta property="og:title" content="${escapeHtml(page.title)}" />
     <meta property="og:description" content="${escapeHtml(page.description)}" />
-    <meta property="og:url" content="${canonical}" />
+    <meta property="og:url" content="${escapeHtml(canonical)}" />
   `;
 
-  html = html.replace('</head>', `${seo}\n</head>`);
+  const websiteSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'PDF Converter Elite',
+    url: `${SITE_URL}/`,
+    inLanguage: 'en'
+  };
+
+  const pageSchema = {
+    '@context': 'https://schema.org',
+    '@type': route === '/' ? 'WebSite' : 'WebPage',
+    name: page.title,
+    url: canonical,
+    description: page.description,
+    inLanguage: 'en',
+    isPartOf: {
+      '@type': 'WebSite',
+      name: 'PDF Converter Elite',
+      url: `${SITE_URL}/`
+    }
+  };
+
+  const schema = route === '/' ? websiteSchema : pageSchema;
+
+  const structuredData = JSON.stringify(schema)
+    .replace(/</g, '\\u003c');
+
+  html = html.replace(
+    '</head>',
+    `${seo}
+    <script type="application/ld+json">${structuredData}</script>
+    </head>`
+  );
 
   const folder = path.join(
     distDir,
@@ -125,4 +157,3 @@ for (const [route, page] of Object.entries(pages)) {
 }
 
 console.log('SEO completed for all 14 pages.');
-
