@@ -20,7 +20,7 @@ const TermsOfService = lazy(() => import('./TermsOfService'));
 
 const tools = [
   {
-    icon: 'ðŸ“',
+    icon: '📝',
     name: 'PDF to Word',
     slug: '/pdf-to-word',
     desc: 'Convert PDF documents into Word files.',
@@ -31,7 +31,7 @@ const tools = [
     details: 'This tool is useful when you need to reuse PDF content in Microsoft Word. Conversion results depend on the original PDF structure, and complex layouts may require adjustments.'
   },
   {
-    icon: 'ðŸ“Š',
+    icon: '📊',
     name: 'PDF to Excel',
     slug: '/pdf-to-excel',
     desc: 'Extract PDF text and data into Excel spreadsheets.',
@@ -42,7 +42,7 @@ const tools = [
     details: 'Use this tool to work with information extracted from PDFs in a spreadsheet. Complex tables and scanned documents may need manual formatting after conversion.'
   },
   {
-    icon: 'ðŸ“š',
+    icon: '📚',
     name: 'Merge PDF',
     slug: '/merge-pdf',
     desc: 'Combine multiple PDF files into one document.',
@@ -53,7 +53,7 @@ const tools = [
     details: 'Select the PDF documents you want to combine, process them and download the merged PDF. Check the resulting page order before sharing.'
   },
   {
-    icon: 'âœ‚ï¸',
+    icon: '✂️',
     name: 'Split PDF',
     slug: '/split-pdf',
     desc: 'Separate PDF pages into individual files.',
@@ -64,7 +64,7 @@ const tools = [
     details: 'Splitting PDFs can help you organize large documents and share only the pages you need. Review the available splitting options before processing.'
   },
   {
-    icon: 'ðŸ—œï¸',
+    icon: '🗜️',
     name: 'Compress PDF',
     slug: '/compress-pdf',
     desc: 'Optimize PDF files and reduce their size.',
@@ -75,7 +75,7 @@ const tools = [
     details: 'Compression results vary depending on the document. PDFs that are already optimized may show little or no reduction in size.'
   },
   {
-    icon: 'ðŸ”',
+    icon: '🔐',
     name: 'Protect PDF',
     slug: '/protect-pdf',
     desc: 'Password protect or unlock PDF documents.',
@@ -86,7 +86,7 @@ const tools = [
     details: 'Use password protection to restrict access to PDF documents. Only unlock files that you own or are authorized to access, and keep your passwords secure.'
   },
   {
-    icon: 'ðŸ“„',
+    icon: '📄',
     name: 'Word to PDF',
     slug: '/word-to-pdf',
     desc: 'Turn Word documents into PDF files.',
@@ -97,7 +97,7 @@ const tools = [
     details: 'PDF format helps make documents easier to distribute across different devices. Review the converted file to confirm that formatting appears as expected.'
   },
   {
-    icon: 'ðŸ–¼ï¸',
+    icon: '🖼️',
     name: 'JPG to PDF',
     slug: '/jpg-to-pdf',
     desc: 'Convert JPG images into PDF documents.',
@@ -108,7 +108,7 @@ const tools = [
     details: 'JPG to PDF conversion is useful for organizing pictures and document photographs into PDF format. Image quality depends on the original files.'
   },
   {
-    icon: 'ðŸ”„',
+    icon: '🔄',
     name: 'Rotate PDF',
     slug: '/rotate-pdf',
     desc: 'Rotate PDF pages to the correct orientation.',
