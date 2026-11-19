@@ -7,7 +7,7 @@ const distDir = path.resolve('dist');
 
 const pages = {
   '/': {
-    title: 'Free Online PDF Tools | PDF Converter Elite',
+    title: 'PDF Converter Elite | Free Online PDF Converter & Tools',
     description: 'Free online PDF tools to merge, split, compress, rotate and protect PDFs. Convert PDF, Word, Excel and JPG files online.'
   },
   '/pdf-to-word': {
@@ -125,3 +125,4 @@ for (const [route, page] of Object.entries(pages)) {
 }
 
 console.log('SEO completed for all 14 pages.');
+

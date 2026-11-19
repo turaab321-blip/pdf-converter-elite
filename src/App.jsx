@@ -1,4 +1,4 @@
-import ToolFAQ from './ToolFAQ';
+﻿import ToolFAQ from './ToolFAQ';
 
 import { lazy, Suspense, useEffect, useState } from 'react';
 import './App.css';
@@ -20,7 +20,7 @@ const TermsOfService = lazy(() => import('./TermsOfService'));
 
 const tools = [
   {
-    icon: '📝',
+    icon: 'ðŸ“',
     name: 'PDF to Word',
     slug: '/pdf-to-word',
     desc: 'Convert PDF documents into Word files.',
@@ -31,7 +31,7 @@ const tools = [
     details: 'This tool is useful when you need to reuse PDF content in Microsoft Word. Conversion results depend on the original PDF structure, and complex layouts may require adjustments.'
   },
   {
-    icon: '📊',
+    icon: 'ðŸ“Š',
     name: 'PDF to Excel',
     slug: '/pdf-to-excel',
     desc: 'Extract PDF text and data into Excel spreadsheets.',
@@ -42,7 +42,7 @@ const tools = [
     details: 'Use this tool to work with information extracted from PDFs in a spreadsheet. Complex tables and scanned documents may need manual formatting after conversion.'
   },
   {
-    icon: '📚',
+    icon: 'ðŸ“š',
     name: 'Merge PDF',
     slug: '/merge-pdf',
     desc: 'Combine multiple PDF files into one document.',
@@ -53,7 +53,7 @@ const tools = [
     details: 'Select the PDF documents you want to combine, process them and download the merged PDF. Check the resulting page order before sharing.'
   },
   {
-    icon: '✂️',
+    icon: 'âœ‚ï¸',
     name: 'Split PDF',
     slug: '/split-pdf',
     desc: 'Separate PDF pages into individual files.',
@@ -64,7 +64,7 @@ const tools = [
     details: 'Splitting PDFs can help you organize large documents and share only the pages you need. Review the available splitting options before processing.'
   },
   {
-    icon: '🗜️',
+    icon: 'ðŸ—œï¸',
     name: 'Compress PDF',
     slug: '/compress-pdf',
     desc: 'Optimize PDF files and reduce their size.',
@@ -75,7 +75,7 @@ const tools = [
     details: 'Compression results vary depending on the document. PDFs that are already optimized may show little or no reduction in size.'
   },
   {
-    icon: '🔐',
+    icon: 'ðŸ”',
     name: 'Protect PDF',
     slug: '/protect-pdf',
     desc: 'Password protect or unlock PDF documents.',
@@ -86,7 +86,7 @@ const tools = [
     details: 'Use password protection to restrict access to PDF documents. Only unlock files that you own or are authorized to access, and keep your passwords secure.'
   },
   {
-    icon: '📄',
+    icon: 'ðŸ“„',
     name: 'Word to PDF',
     slug: '/word-to-pdf',
     desc: 'Turn Word documents into PDF files.',
@@ -97,7 +97,7 @@ const tools = [
     details: 'PDF format helps make documents easier to distribute across different devices. Review the converted file to confirm that formatting appears as expected.'
   },
   {
-    icon: '🖼️',
+    icon: 'ðŸ–¼ï¸',
     name: 'JPG to PDF',
     slug: '/jpg-to-pdf',
     desc: 'Convert JPG images into PDF documents.',
@@ -108,7 +108,7 @@ const tools = [
     details: 'JPG to PDF conversion is useful for organizing pictures and document photographs into PDF format. Image quality depends on the original files.'
   },
   {
-    icon: '🔄',
+    icon: 'ðŸ”„',
     name: 'Rotate PDF',
     slug: '/rotate-pdf',
     desc: 'Rotate PDF pages to the correct orientation.',
@@ -176,7 +176,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    let title = 'Free Online PDF Tools | PDF Converter Elite';
+    let title = 'PDF Converter Elite | Free Online PDF Converter & Tools';
     let description = homeDescription;
 
     if (selected) {
@@ -262,7 +262,7 @@ export default function App() {
           className="logo"
           onClick={event => handleLink(event, '/')}
         >
-          <span className="logo-icon">▤</span>
+          <span className="logo-icon">â–¤</span>
           <span>PDF Converter <strong>Elite</strong></span>
         </a>
 
@@ -273,7 +273,7 @@ export default function App() {
           aria-expanded={menuOpen}
           type="button"
         >
-          {menuOpen ? '✕' : '☰'}
+          {menuOpen ? 'âœ•' : 'â˜°'}
         </button>
 
         <nav className={menuOpen ? 'nav-open' : ''}>
@@ -311,7 +311,7 @@ export default function App() {
           href="/#tools"
           onClick={event => handleSectionLink(event, 'tools')}
         >
-          Explore Tools ↗
+          Explore Tools â†—
         </a>
       </header>
 
@@ -330,7 +330,7 @@ export default function App() {
             onClick={() => goToSection('tools')}
             type="button"
           >
-            ← Back to All Tools
+            â† Back to All Tools
           </button>
 
           <div className="active-tool-content">
@@ -418,7 +418,7 @@ export default function App() {
             <div className="hero-inner">
               <div className="hero-copy">
                 <div className="eyebrow">
-                  ✦ YOUR ALL-IN-ONE PDF TOOLKIT
+                  âœ¦ YOUR ALL-IN-ONE PDF TOOLKIT
                 </div>
 
                 <h1>
@@ -433,9 +433,9 @@ export default function App() {
                 </p>
 
                 <div className="hero-benefits">
-                  <span>✓ Browser-Based</span>
-                  <span>⚡ Easy to Use</span>
-                  <span>✓ Free Tools</span>
+                  <span>âœ“ Browser-Based</span>
+                  <span>âš¡ Easy to Use</span>
+                  <span>âœ“ Free Tools</span>
                 </div>
 
                 <div className="hero-actions">
@@ -444,7 +444,7 @@ export default function App() {
                     href="/#tools"
                     onClick={event => handleSectionLink(event, 'tools')}
                   >
-                    Explore All Tools <span>→</span>
+                    Explore All Tools <span>â†’</span>
                   </a>
 
                   <a
@@ -452,7 +452,7 @@ export default function App() {
                     href="/#about"
                     onClick={event => handleSectionLink(event, 'about')}
                   >
-                    Learn More ↗
+                    Learn More â†—
                   </a>
                 </div>
               </div>
@@ -463,13 +463,13 @@ export default function App() {
 
                 <div className="float-icon float-word">W</div>
                 <div className="float-icon float-excel">X</div>
-                <div className="float-icon float-lock">🔒</div>
-                <div className="float-icon float-image">▧</div>
+                <div className="float-icon float-lock">ðŸ”’</div>
+                <div className="float-icon float-image">â–§</div>
 
                 <div className="pdf-sheet">
                   <div className="sheet-fold"></div>
                   <div className="sheet-badge">PDF</div>
-                  <div className="sheet-symbol">▤</div>
+                  <div className="sheet-symbol">â–¤</div>
                   <div className="sheet-line"></div>
                   <div className="sheet-line short"></div>
                   <div className="sheet-line"></div>
@@ -480,7 +480,7 @@ export default function App() {
 
           <main className="main" id="tools">
             <div className="section-label">
-              ✦ OUR PDF TOOLS ✦
+              âœ¦ OUR PDF TOOLS âœ¦
             </div>
 
             <h2>
@@ -493,7 +493,7 @@ export default function App() {
             </p>
 
             <div className="search-box">
-              <span>⌕</span>
+              <span>âŒ•</span>
               <input
                 className="search"
                 placeholder="Search for a PDF tool..."
@@ -524,7 +524,7 @@ export default function App() {
                     <span>{tool.desc}</span>
                   </span>
 
-                  <span className="tool-arrow">→</span>
+                  <span className="tool-arrow">â†’</span>
                 </a>
               ))}
             </div>
@@ -547,7 +547,7 @@ export default function App() {
             <p>Keep backup copies of important files and avoid uploading highly sensitive documents unless you understand the processing involved. For details, read our <a href="/privacy-policy">Privacy Policy</a>.</p>
           </section>
           <section className="about" id="about">
-            <div className="about-symbol">✦</div>
+            <div className="about-symbol">âœ¦</div>
             <div className="section-label">
               MADE FOR SIMPLICITY
             </div>
@@ -565,7 +565,7 @@ export default function App() {
               className="about-button"
               onClick={event => handleSectionLink(event, 'tools')}
             >
-              Start Using Tools →
+              Start Using Tools â†’
             </a>
           </section>
         </>
@@ -574,7 +574,7 @@ export default function App() {
       <footer className="footer">
         <div className="footer-top">
           <div className="footer-logo">
-            ▤ PDF Converter <strong>Elite</strong>
+            â–¤ PDF Converter <strong>Elite</strong>
           </div>
 
           <p>Smart PDF tools for simpler everyday work.</p>
@@ -617,7 +617,7 @@ export default function App() {
 
         <div className="footer-bottom">
           <span>
-            © {new Date().getFullYear()} PDF Converter Elite.
+            Â© {new Date().getFullYear()} PDF Converter Elite.
             All rights reserved.
           </span>
 
@@ -625,10 +625,11 @@ export default function App() {
             href="/"
             onClick={event => handleLink(event, '/')}
           >
-            Back to top ↑
+            Back to top â†‘
           </a>
         </div>
       </footer>
     </div>
   );
 }
+
