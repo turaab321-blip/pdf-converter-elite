@@ -27,7 +27,7 @@ const tools = [
     color: 'blue',
     component: PDFToWord,
     heading: 'PDF to Word Converter',
-    intro: 'Convert PDF documents into Word files online. Upload your PDF, start the conversion and download the resulting document.',
+    intro: 'Convert PDF to Word online for free. Create a Word document from your PDF while preserving the visual appearance of its pages.',
     details: 'This tool is useful when you need to reuse PDF content in Microsoft Word. Conversion results depend on the original PDF structure, and complex layouts may require adjustments.'
   },
   {
@@ -38,7 +38,7 @@ const tools = [
     color: 'green',
     component: PDFToExcel,
     heading: 'PDF to Excel Converter',
-    intro: 'Convert PDF content into an Excel spreadsheet using our online PDF to Excel tool.',
+    intro: 'Convert PDF to Excel online for free. Extract PDF text and data into an Excel spreadsheet for further organization and editing.',
     details: 'Use this tool to work with information extracted from PDFs in a spreadsheet. Complex tables and scanned documents may need manual formatting after conversion.'
   },
   {
@@ -49,7 +49,7 @@ const tools = [
     color: 'purple',
     component: MergePDF,
     heading: 'Merge PDF Files Online',
-    intro: 'Combine multiple PDF documents into one file for easier sharing, printing and organization.',
+    intro: 'Merge PDF files online for free. Combine multiple PDF documents into one file for easier sharing and organization.',
     details: 'Select the PDF documents you want to combine, process them and download the merged PDF. Check the resulting page order before sharing.'
   },
   {
@@ -60,7 +60,7 @@ const tools = [
     color: 'pink',
     component: SplitPDF,
     heading: 'Split PDF Files Online',
-    intro: 'Separate pages from a PDF document using a simple online PDF splitting tool.',
+    intro: 'Split PDF online for free. Separate PDF pages and extract the pages you need from a document.',
     details: 'Splitting PDFs can help you organize large documents and share only the pages you need. Review the available splitting options before processing.'
   },
   {
@@ -71,7 +71,7 @@ const tools = [
     color: 'blue',
     component: CompressPDF,
     heading: 'Compress PDF Files Online',
-    intro: 'Try reducing PDF file size to make documents easier to store, upload and share.',
+    intro: 'Compress PDF online for free. Try reducing PDF file size for easier uploading and sharing. Compression results depend on the original document.',
     details: 'Compression results vary depending on the document. PDFs that are already optimized may show little or no reduction in size.'
   },
   {
@@ -82,7 +82,7 @@ const tools = [
     color: 'orange',
     component: ProtectPDF,
     heading: 'Protect and Unlock PDF Files',
-    intro: 'Add password protection to a PDF or unlock a document when you have the required password.',
+    intro: 'Password protect PDF files online for free, or unlock authorized documents when you have the required password.',
     details: 'Use password protection to restrict access to PDF documents. Only unlock files that you own or are authorized to access, and keep your passwords secure.'
   },
   {
@@ -93,7 +93,7 @@ const tools = [
     color: 'purple',
     component: WordToPDF,
     heading: 'Word to PDF Converter',
-    intro: 'Convert Word documents into PDF files for convenient sharing and printing.',
+    intro: 'Convert Word to PDF online for free. Turn DOCX documents into PDF files for convenient sharing and printing.',
     details: 'PDF format helps make documents easier to distribute across different devices. Review the converted file to confirm that formatting appears as expected.'
   },
   {
@@ -104,7 +104,7 @@ const tools = [
     color: 'green',
     component: JPGtoPDF,
     heading: 'JPG to PDF Converter',
-    intro: 'Turn JPG images into PDF documents using our online image conversion tool.',
+    intro: 'Convert JPG to PDF online for free. Turn JPG images into PDF documents for easier storage and sharing.',
     details: 'JPG to PDF conversion is useful for organizing pictures and document photographs into PDF format. Image quality depends on the original files.'
   },
   {
@@ -115,7 +115,7 @@ const tools = [
     color: 'pink',
     component: RotatePDF,
     heading: 'Rotate PDF Pages Online',
-    intro: 'Correct the orientation of PDF pages using our online PDF rotation tool.',
+    intro: 'Rotate PDF pages online for free. Correct sideways or upside-down PDF pages and improve document readability.',
     details: 'Rotate sideways or upside-down PDF pages to improve readability. Check the finished document before downloading or sharing.'
   }
 ];
