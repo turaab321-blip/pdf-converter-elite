@@ -1,4 +1,4 @@
-﻿
+
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
@@ -124,15 +124,35 @@ for (const tool of tools) {
 }
 
 const titleOverrides = {
-  '/merge-pdf': 'Merge PDF Files Online Free | PDF Converter Elite',
-  '/split-pdf': 'Split PDF Online Free | PDF Converter Elite',
-  '/compress-pdf': 'Compress PDF Online Free | PDF Converter Elite',
+  '/pdf-to-word': 'PDF to Word Converter Free Online | PDF Converter Elite',
+  '/pdf-to-excel': 'PDF to Excel Converter Free Online | PDF Converter Elite',
+  '/merge-pdf': 'Merge PDF Online Free - Combine PDF Files | PDF Converter Elite',
+  '/split-pdf': 'Split PDF Online Free - Extract PDF Pages | PDF Converter Elite',
+  '/compress-pdf': 'Compress PDF Online Free - Reduce PDF Size | PDF Converter Elite',
   '/protect-pdf': 'Password Protect PDF Online Free | PDF Converter Elite',
-  '/rotate-pdf': 'Rotate PDF Pages Online Free | PDF Converter Elite'
+  '/word-to-pdf': 'Word to PDF Converter Free Online | PDF Converter Elite',
+  '/jpg-to-pdf': 'JPG to PDF Converter Free Online | PDF Converter Elite',
+  '/rotate-pdf': 'Rotate PDF Online Free - Rotate PDF Pages | PDF Converter Elite'
 };
 
 for (const [route, title] of Object.entries(titleOverrides)) {
   pages[route].title = title;
+}
+
+const descriptionOverrides = {
+  '/compress-pdf': 'Compress PDF files online for free. Try reducing PDF file size for easier uploading, sharing and storage. Results depend on the document.',
+  '/jpg-to-pdf': 'Convert JPG to PDF online for free. Turn JPG images into PDF documents using our simple image to PDF converter.',
+  '/merge-pdf': 'Merge PDF files online for free. Combine multiple PDF documents into one file with our easy-to-use PDF merger.',
+  '/pdf-to-excel': 'Convert PDF to Excel online for free. Extract text and data from PDF documents into an Excel spreadsheet using our PDF to XLSX converter.',
+  '/pdf-to-word': 'Convert PDF to Word online for free. Turn PDF pages into a DOCX document while preserving their visual appearance. Easy PDF to Word converter.',
+  '/protect-pdf': 'Password protect PDF files online for free. Add password security or unlock authorized PDF documents when you have the password.',
+  '/rotate-pdf': 'Rotate PDF pages online for free. Fix sideways or upside-down PDF pages and correct document orientation easily.',
+  '/split-pdf': 'Split PDF files online for free. Separate PDF pages and extract the pages you need using our PDF splitter.',
+  '/word-to-pdf': 'Convert Word to PDF online for free. Turn DOCX documents into PDF files for sharing, printing and everyday document use.'
+};
+
+for (const [route, description] of Object.entries(descriptionOverrides)) {
+  pages[route].description = description;
 }
 
 function escapeHtml(value) {
