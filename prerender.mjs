@@ -189,7 +189,7 @@ const original = await readFile(
 );
 
 for (const [route, page] of Object.entries(pages)) {
-  const canonical = `${SITE_URL}${route}`;
+  const canonical = route === "/" ? `${SITE_URL}/` : `${SITE_URL}${route}/`;
   let html = original;
 
   html = html.replace(/<title>[\s\S]*?<\/title>/i, '');
