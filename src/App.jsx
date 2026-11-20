@@ -193,7 +193,7 @@ export default function App() {
 
   function navigate(path) {
     if (getCurrentPath() !== path) {
-      window.history.pushState({}, '', path);
+      window.location.assign(path);
     }
 
     setCurrentPath(path);
