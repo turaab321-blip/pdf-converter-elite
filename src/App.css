@@ -338,7 +338,7 @@ a { text-decoration: none; color: inherit; }
 }
 
 .section-label {
-  color: #fa4e75;
+  color: #bd2851;
   font-size: 13px;
   font-weight: 900;
   letter-spacing: 1.5px;
@@ -354,10 +354,10 @@ a { text-decoration: none; color: inherit; }
   color: #151b3b;
 }
 
-.main h2 span { color: #fa4e75; }
+.main h2 span { color: #bd2851; }
 
 .section-subtitle {
-  color: #78829c;
+  color: #505b76;
   font-size: 15px;
   line-height: 1.7;
 }
